@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
+import { Repository, ILike } from 'typeorm';
 import { Book } from './entities/book.entity';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -72,9 +72,9 @@ export class BooksService {
   async search(query: string): Promise<Book[]> {
     return await this.bookRepository.find({
       where: [
-        { title: Like(`%${query}%`) },
-        { author: Like(`%${query}%`) },
-        { isbn: Like(`%${query}%`) },
+        { title: ILike(`%${query}%`) },
+        { author: ILike(`%${query}%`) },
+        { isbn: ILike(`%${query}%`) },
       ],
       order: { createdAt: 'DESC' },
     });
