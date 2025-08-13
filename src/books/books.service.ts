@@ -17,19 +17,21 @@ export class BooksService {
   ) {}
 
   async create(createBookDto: CreateBookDto): Promise<Book> {
-    try {
-      const book = this.bookRepository.create({
-        ...createBookDto,
-        availableQuantity: createBookDto.totalQuantity,
-      });
-      return await this.bookRepository.save(book);
-    } catch (error) {
-      if (error.code === '23505') {
-        // PostgreSQL unique violation
-        throw new ConflictException('Book with this ISBN already exists');
-      }
-      throw error;
+    // Check if ISBN already exists
+    const existingBook = await this.bookRepository.findOne({
+      where: { isbn: createBookDto.isbn },
+    });
+
+    if (existingBook) {
+      throw new ConflictException('Book with this ISBN already exists');
     }
+
+    const book = this.bookRepository.create({
+      ...createBookDto,
+      availableQuantity: createBookDto.totalQuantity,
+    });
+
+    return await this.bookRepository.save(book);
   }
 
   async findAll(): Promise<Book[]> {
@@ -49,15 +51,19 @@ export class BooksService {
   async update(id: number, updateBookDto: UpdateBookDto): Promise<Book> {
     const book = await this.findOne(id);
 
-    try {
-      Object.assign(book, updateBookDto);
-      return await this.bookRepository.save(book);
-    } catch (error) {
-      if (error.code === '23505') {
+    // Check if ISBN is being updated and already exists
+    if (updateBookDto.isbn && updateBookDto.isbn !== book.isbn) {
+      const existingBook = await this.bookRepository.findOne({
+        where: { isbn: updateBookDto.isbn },
+      });
+
+      if (existingBook) {
         throw new ConflictException('Book with this ISBN already exists');
       }
-      throw error;
     }
+
+    Object.assign(book, updateBookDto);
+    return await this.bookRepository.save(book);
   }
 
   async remove(id: number): Promise<void> {
