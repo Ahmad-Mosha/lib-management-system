@@ -17,7 +17,6 @@ export class BooksService {
   ) {}
 
   async create(createBookDto: CreateBookDto): Promise<Book> {
-    // Check if ISBN already exists
     const existingBook = await this.bookRepository.findOne({
       where: { isbn: createBookDto.isbn },
     });
@@ -40,7 +39,7 @@ export class BooksService {
     });
   }
 
-  async findOne(id: number): Promise<Book> {
+  async findOne(id: string): Promise<Book> {
     const book = await this.bookRepository.findOne({ where: { id } });
     if (!book) {
       throw new NotFoundException(`Book with ID ${id} not found`);
@@ -48,10 +47,9 @@ export class BooksService {
     return book;
   }
 
-  async update(id: number, updateBookDto: UpdateBookDto): Promise<Book> {
+  async update(id: string, updateBookDto: UpdateBookDto): Promise<Book> {
     const book = await this.findOne(id);
 
-    // Check if ISBN is being updated and already exists
     if (updateBookDto.isbn && updateBookDto.isbn !== book.isbn) {
       const existingBook = await this.bookRepository.findOne({
         where: { isbn: updateBookDto.isbn },
@@ -66,7 +64,7 @@ export class BooksService {
     return await this.bookRepository.save(book);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     const book = await this.findOne(id);
     await this.bookRepository.remove(book);
   }

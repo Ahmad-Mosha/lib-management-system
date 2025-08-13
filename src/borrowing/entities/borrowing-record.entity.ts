@@ -12,14 +12,14 @@ import { Borrower } from '../../borrowers/entities/borrower.entity';
 
 @Entity('borrowing_records')
 export class BorrowingRecord {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ name: 'book_id' })
-  bookId: number;
+  bookId: string;
 
   @Column({ name: 'borrower_id' })
-  borrowerId: number;
+  borrowerId: string;
 
   @Column({ name: 'checkout_date', type: 'date' })
   checkoutDate: Date;

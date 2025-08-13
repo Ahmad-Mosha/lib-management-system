@@ -56,7 +56,7 @@ export class BooksController {
   @ApiOperation({ summary: 'Get a book by ID' })
   @ApiResponse({ status: 200, description: 'Book found' })
   @ApiResponse({ status: 404, description: 'Book not found' })
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id') id: string) {
     return this.booksService.findOne(id);
   }
 
@@ -64,10 +64,7 @@ export class BooksController {
   @ApiOperation({ summary: 'Update a book' })
   @ApiResponse({ status: 200, description: 'Book updated successfully' })
   @ApiResponse({ status: 404, description: 'Book not found' })
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateBookDto: UpdateBookDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
     return this.booksService.update(id, updateBookDto);
   }
 
@@ -75,7 +72,7 @@ export class BooksController {
   @ApiOperation({ summary: 'Delete a book' })
   @ApiResponse({ status: 200, description: 'Book deleted successfully' })
   @ApiResponse({ status: 404, description: 'Book not found' })
-  remove(@Param('id', ParseIntPipe) id: number) {
+  remove(@Param('id') id: string) {
     return this.booksService.remove(id);
   }
 }
