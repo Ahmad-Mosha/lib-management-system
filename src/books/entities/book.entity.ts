@@ -1,4 +1,4 @@
-import { BorrowingRecord } from 'src/borrowing/entities/borrowing-record.entity';
+import { BorrowingRecord } from '../../borrowing/entities/borrowing-record.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
