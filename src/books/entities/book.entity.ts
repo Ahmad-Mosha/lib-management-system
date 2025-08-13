@@ -1,4 +1,4 @@
-import { BorrowingRecord } from 'src/borrowing/entities/borrowing-record.entity';
+import { BorrowingRecord } from '../../borrowing/entities/borrowing-record.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -10,8 +10,8 @@ import {
 
 @Entity('books')
 export class Book {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   title: string;

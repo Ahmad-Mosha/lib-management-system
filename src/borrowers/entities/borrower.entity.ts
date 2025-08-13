@@ -10,8 +10,8 @@ import {
 
 @Entity('borrowers')
 export class Borrower {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
