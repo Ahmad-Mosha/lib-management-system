@@ -7,7 +7,6 @@ import {
 } from '@nestjs/swagger';
 import { BorrowingService } from './borrowing.service';
 import { CheckoutBookDto } from './dto/checkout-book.dto';
-import { ReturnBookDto } from './dto/return-book.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('borrowing')
@@ -17,7 +16,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 export class BorrowingController {
   constructor(private readonly borrowingService: BorrowingService) {}
 
-  @Post('checkout')
+  @Post('borrowers/:borrowerId/checkout')
   @ApiOperation({ summary: 'Check out a book to a borrower' })
   @ApiResponse({ status: 201, description: 'Book checked out successfully' })
   @ApiResponse({
@@ -25,19 +24,25 @@ export class BorrowingController {
     description: 'Book not available or already checked out',
   })
   @ApiResponse({ status: 404, description: 'Book or borrower not found' })
-  checkoutBook(@Body() checkoutBookDto: CheckoutBookDto) {
-    return this.borrowingService.checkoutBook(checkoutBookDto);
+  checkoutBook(
+    @Param('borrowerId') borrowerId: string,
+    @Body() checkoutBookDto: CheckoutBookDto,
+  ) {
+    return this.borrowingService.checkoutBook(borrowerId, checkoutBookDto);
   }
 
-  @Post('return')
-  @ApiOperation({ summary: 'Return a book from a borrower' })
+  @Post('records/:borrowingRecordId/return')
+  @ApiOperation({ summary: 'Return a book using borrowing record ID' })
   @ApiResponse({ status: 200, description: 'Book returned successfully' })
-  @ApiResponse({ status: 404, description: 'No active checkout found' })
-  returnBook(@Body() returnBookDto: ReturnBookDto) {
-    return this.borrowingService.returnBook(returnBookDto);
+  @ApiResponse({
+    status: 404,
+    description: 'No active checkout found with this ID',
+  })
+  returnBookByRecordId(@Param('borrowingRecordId') borrowingRecordId: string) {
+    return this.borrowingService.returnBookByRecordId(borrowingRecordId);
   }
 
-  @Get('borrower/:borrowerId/current-books')
+  @Get('borrowers/:borrowerId/current-books')
   @ApiOperation({
     summary: 'Get current books borrowed by a specific borrower',
   })

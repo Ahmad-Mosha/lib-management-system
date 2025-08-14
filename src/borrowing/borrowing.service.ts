@@ -9,7 +9,6 @@ import { BorrowingRecord } from './entities/borrowing-record.entity';
 import { Book } from '../books/entities/book.entity';
 import { Borrower } from '../borrowers/entities/borrower.entity';
 import { CheckoutBookDto } from './dto/checkout-book.dto';
-import { ReturnBookDto } from './dto/return-book.dto';
 
 @Injectable()
 export class BorrowingService {
@@ -23,9 +22,10 @@ export class BorrowingService {
   ) {}
 
   async checkoutBook(
+    borrowerId: string,
     checkoutBookDto: CheckoutBookDto,
   ): Promise<BorrowingRecord> {
-    const { bookId, borrowerId } = checkoutBookDto;
+    const { bookId } = checkoutBookDto;
 
     const book = await this.bookRepository.findOne({ where: { id: bookId } });
     if (!book) {
@@ -80,30 +80,33 @@ export class BorrowingService {
     });
   }
 
-  async returnBook(returnBookDto: ReturnBookDto): Promise<BorrowingRecord> {
-    const { bookId, borrowerId } = returnBookDto;
-
+  async returnBookByRecordId(
+    borrowingRecordId: string,
+  ): Promise<BorrowingRecord> {
+    // Find active borrowing record by ID
     const borrowingRecord = await this.borrowingRepository.findOne({
       where: {
-        bookId,
-        borrowerId,
+        id: borrowingRecordId,
         returnDate: IsNull(),
       },
       relations: ['book', 'borrower'],
     });
 
     if (!borrowingRecord) {
-      throw new NotFoundException(
-        'No active checkout found for this book and borrower',
-      );
+      throw new NotFoundException('No active checkout found with this ID');
     }
 
+    // Update return date
     borrowingRecord.returnDate = new Date();
 
-    const book = await this.bookRepository.findOne({ where: { id: bookId } });
+    // Update book availability
+    const book = await this.bookRepository.findOne({
+      where: { id: borrowingRecord.bookId },
+    });
     book.availableQuantity += 1;
     await this.bookRepository.save(book);
 
+    // Save updated borrowing record
     return await this.borrowingRepository.save(borrowingRecord);
   }
 
