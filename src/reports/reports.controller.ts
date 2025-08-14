@@ -32,13 +32,30 @@ export class ReportsController {
   }
 
   @Get('export/overdue-last-month')
-  @ApiOperation({ summary: 'Export overdue borrows from last month' })
+  @ApiOperation({
+    summary: 'Download overdue borrows report',
+    description:
+      'Downloads a file with overdue borrowing records from last month. Choose CSV or Excel format.',
+  })
   @ApiQuery({
     name: 'format',
     enum: ['csv', 'xlsx'],
-    description: 'Export format',
+    description: 'File format for download',
+    required: false,
+    example: 'xlsx',
   })
-  @ApiResponse({ status: 200, description: 'File download' })
+  @ApiResponse({
+    status: 200,
+    description: 'File download starts automatically',
+    content: {
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+        schema: { type: 'string', format: 'binary' },
+      },
+      'text/csv': {
+        schema: { type: 'string', format: 'binary' },
+      },
+    },
+  })
   async exportOverdueBorrowsLastMonth(
     @Query('format') format: 'csv' | 'xlsx' = 'xlsx',
     @Res() res: Response,
@@ -69,13 +86,30 @@ export class ReportsController {
   }
 
   @Get('export/borrowing-last-month')
-  @ApiOperation({ summary: 'Export all borrowing processes from last month' })
+  @ApiOperation({
+    summary: 'Download borrowing processes report',
+    description:
+      'Downloads a file with all borrowing records from last month. Choose CSV or Excel format.',
+  })
   @ApiQuery({
     name: 'format',
     enum: ['csv', 'xlsx'],
-    description: 'Export format',
+    description: 'File format for download',
+    required: false,
+    example: 'xlsx',
   })
-  @ApiResponse({ status: 200, description: 'File download' })
+  @ApiResponse({
+    status: 200,
+    description: 'File download starts automatically',
+    content: {
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+        schema: { type: 'string', format: 'binary' },
+      },
+      'text/csv': {
+        schema: { type: 'string', format: 'binary' },
+      },
+    },
+  })
   async exportBorrowingProcessesLastMonth(
     @Query('format') format: 'csv' | 'xlsx' = 'xlsx',
     @Res() res: Response,

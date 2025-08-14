@@ -1,5 +1,5 @@
-version: '3.8'
 services:
+  # PostgreSQL Database
   postgres:
     image: postgres:15
     container_name: library_postgres
@@ -8,11 +8,42 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - library_network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d library_management']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # NestJS Application
+  app:
+    build: .
+    container_name: library_app
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: library_management
+      JWT_SECRET: your-super-secret-jwt-key-for-development
+      JWT_EXPIRES_IN: 24h
+      NODE_ENV: development
+      PORT: 3000
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "sleep 10 && npm run start:dev"
+    networks:
+      - library_network
+    restart: unless-stopped
 
 volumes:
   postgres_data:
