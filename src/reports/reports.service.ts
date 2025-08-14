@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThan, Between } from 'typeorm';
+import { Repository, LessThan } from 'typeorm';
 import { BorrowingRecord } from '../borrowing/entities/borrowing-record.entity';
 import * as XLSX from 'xlsx';
 
@@ -13,32 +13,36 @@ export class ReportsService {
 
   async getOverdueBorrowsLastMonth(): Promise<BorrowingRecord[]> {
     const now = new Date();
-    const lastMonth = new Date();
-    lastMonth.setMonth(now.getMonth() - 1);
+    const lastMonthStart = new Date();
+    lastMonthStart.setMonth(now.getMonth() - 1, 1); // First day of last month
+    const lastMonthEnd = new Date();
+    lastMonthEnd.setMonth(now.getMonth(), 0); // Last day of last month
 
-    return await this.borrowingRepository.find({
+    console.log('Overdue query range:', lastMonthStart, 'to', lastMonthEnd);
+
+    // First, let's get all overdue records to debug
+    const allOverdue = await this.borrowingRepository.find({
       where: {
         returnDate: null, // Still not returned
         dueDate: LessThan(now), // Past due date
-        checkoutDate: Between(lastMonth, now), // Checked out in last month
       },
       relations: ['book', 'borrower'],
       order: { dueDate: 'ASC' },
     });
+
+    console.log('All overdue records:', allOverdue.length);
+    return allOverdue; // Return all overdue for now to test
   }
 
   async getAllBorrowingProcessesLastMonth(): Promise<BorrowingRecord[]> {
-    const now = new Date();
-    const lastMonth = new Date();
-    lastMonth.setMonth(now.getMonth() - 1);
-
-    return await this.borrowingRepository.find({
-      where: {
-        checkoutDate: Between(lastMonth, now),
-      },
+    // For now, let's get all borrowing records to test
+    const allRecords = await this.borrowingRepository.find({
       relations: ['book', 'borrower'],
       order: { checkoutDate: 'DESC' },
     });
+
+    console.log('All borrowing records:', allRecords.length);
+    return allRecords;
   }
 
   exportToExcel(data: any[], filename: string): Buffer {

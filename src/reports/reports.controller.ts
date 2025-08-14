@@ -28,7 +28,10 @@ export class ReportsController {
   @ApiOperation({ summary: 'Get all borrowing processes from last month' })
   @ApiResponse({ status: 200, description: 'List of borrowing processes' })
   async getBorrowingProcessesLastMonth() {
-    return await this.reportsService.getAllBorrowingProcessesLastMonth();
+    const result =
+      await this.reportsService.getAllBorrowingProcessesLastMonth();
+    console.log('Returning records:', result.length);
+    return result;
   }
 
   @Get('export/overdue-last-month')
@@ -61,16 +64,18 @@ export class ReportsController {
     @Res() res: Response,
   ) {
     const data = await this.reportsService.getOverdueBorrowsLastMonth();
+    console.log('Export data count:', data.length); // Debug log
+
     const filename = `overdue-borrows-last-month-${new Date().toISOString().split('T')[0]}`;
 
     if (format === 'csv') {
       const csvData = this.reportsService.exportToCSV(data);
-      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Type', 'text/csv; charset=utf-8');
       res.setHeader(
         'Content-Disposition',
         `attachment; filename="${filename}.csv"`,
       );
-      res.send(csvData);
+      return res.send(csvData);
     } else {
       const excelBuffer = this.reportsService.exportToExcel(data, filename);
       res.setHeader(
@@ -81,7 +86,7 @@ export class ReportsController {
         'Content-Disposition',
         `attachment; filename="${filename}.xlsx"`,
       );
-      res.send(excelBuffer);
+      return res.send(excelBuffer);
     }
   }
 

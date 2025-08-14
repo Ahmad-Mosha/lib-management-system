@@ -164,46 +164,71 @@ export class SeedService {
       return;
     }
 
+    // Calculate last month dates
+    const now = new Date();
+    const lastMonth = new Date();
+    lastMonth.setMonth(now.getMonth() - 1);
+
     const borrowingRecords = [
-      // Active borrowing (not overdue)
+      // Active borrowing (not overdue) - from last month
       {
         bookId: books[0].id, // The Great Gatsby
         borrowerId: borrowers[0].id, // John Smith
-        checkoutDate: new Date('2024-08-01'),
-        dueDate: new Date('2024-08-15'),
+        checkoutDate: new Date(
+          lastMonth.getFullYear(),
+          lastMonth.getMonth(),
+          5,
+        ),
+        dueDate: new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 19),
         returnDate: null,
       },
-      // Overdue borrowing (past due date)
+      // Overdue borrowing (past due date) - from last month
       {
         bookId: books[1].id, // To Kill a Mockingbird
         borrowerId: borrowers[1].id, // Emily Johnson
-        checkoutDate: new Date('2024-07-15'),
-        dueDate: new Date('2024-07-29'), // Overdue!
+        checkoutDate: new Date(
+          lastMonth.getFullYear(),
+          lastMonth.getMonth(),
+          1,
+        ),
+        dueDate: new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 15), // Overdue!
         returnDate: null,
       },
-      // Another overdue borrowing
+      // Another overdue borrowing - from last month
       {
         bookId: books[2].id, // 1984
         borrowerId: borrowers[2].id, // Michael Brown
-        checkoutDate: new Date('2024-07-10'),
-        dueDate: new Date('2024-07-24'), // Very overdue!
+        checkoutDate: new Date(
+          lastMonth.getFullYear(),
+          lastMonth.getMonth(),
+          3,
+        ),
+        dueDate: new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 17), // Very overdue!
         returnDate: null,
       },
-      // Returned book (completed transaction)
+      // Returned book (completed transaction) - from last month
       {
         bookId: books[3].id, // Pride and Prejudice
         borrowerId: borrowers[3].id, // Sarah Davis
-        checkoutDate: new Date('2024-07-20'),
-        dueDate: new Date('2024-08-03'),
-        returnDate: new Date('2024-08-01'), // Returned on time
+        checkoutDate: new Date(
+          lastMonth.getFullYear(),
+          lastMonth.getMonth(),
+          10,
+        ),
+        dueDate: new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 24),
+        returnDate: new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 22), // Returned on time
       },
-      // Another returned book (returned late)
+      // Another returned book (returned late) - from last month
       {
         bookId: books[4].id, // The Catcher in the Rye
         borrowerId: borrowers[0].id, // John Smith (can borrow multiple)
-        checkoutDate: new Date('2024-07-05'),
-        dueDate: new Date('2024-07-19'),
-        returnDate: new Date('2024-07-25'), // Returned late
+        checkoutDate: new Date(
+          lastMonth.getFullYear(),
+          lastMonth.getMonth(),
+          8,
+        ),
+        dueDate: new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 22),
+        returnDate: new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 25), // Returned late
       },
     ];
 
