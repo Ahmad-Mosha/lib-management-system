@@ -3,9 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BorrowingController } from './borrowing.controller';
 import { BorrowingService } from './borrowing.service';
 import { BorrowingRecord } from './entities/borrowing-record.entity';
+import { Book } from '../books/entities/book.entity';
+import { Borrower } from '../borrowers/entities/borrower.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([BorrowingRecord])],
+  imports: [TypeOrmModule.forFeature([BorrowingRecord, Book, Borrower])],
   controllers: [BorrowingController],
   providers: [BorrowingService],
   exports: [BorrowingService],
