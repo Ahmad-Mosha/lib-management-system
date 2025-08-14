@@ -6,21 +6,15 @@ A comprehensive RESTful API for managing library books, borrowers, and borrowing
 
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
-- [Prerequisites](#-prerequisites)
 - [Quick Start](#-quick-start)
 - [Setup Options](#-setup-options)
-  - [Option 1: Full Docker Setup (Recommended)](#option-1-full-docker-setup-recommended)
-  - [Option 2: Docker Database Only](#option-2-docker-database-only)
-  - [Option 3: Local Development](#option-3-local-development)
 - [API Documentation](#-api-documentation)
 - [Authentication](#-authentication)
 - [Core Features](#-core-features)
 - [Bonus Features](#-bonus-features)
 - [Database Schema](#-database-schema)
 - [Testing](#-testing)
-- [Project Structure](#-project-structure)
-- [Environment Variables](#-environment-variables)
-- [Contributing](#-contributing)
+- [Pre-loaded Test Data](#-pre-loaded-test-data)
 
 ## ✨ Features
 
@@ -51,12 +45,6 @@ A comprehensive RESTful API for managing library books, borrowers, and borrowing
 - **Validation**: class-validator
 - **Rate Limiting**: @nestjs/throttler
 
-## 📋 Prerequisites
-
-- **Docker** and **Docker Compose** (for containerized setup)
-- **Node.js 18+** and **npm** (for local development)
-- **PostgreSQL 15+** (for local database setup)
-
 ## 🚀 Quick Start
 
 The fastest way to get started:
@@ -73,13 +61,7 @@ That's it! The application will be running at `http://localhost:3000` with pre-l
 
 ### Option 1: Full Docker Setup (Recommended)
 
-**Perfect for**: Quick testing, production-like environment, reviewers
-
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd library-management-system
-
 # Start everything with one command
 docker-compose up --build
 
@@ -94,7 +76,6 @@ chmod +x setup.sh
 - ✅ NestJS application
 - ✅ Pre-loaded test data
 - ✅ Hot reloading enabled
-- ✅ All dependencies handled
 
 **Access:**
 
@@ -103,103 +84,54 @@ chmod +x setup.sh
 
 ### Option 2: Docker Database Only
 
-**Perfect for**: Local development with your preferred IDE
-
 ```bash
 # Start only the database
 docker-compose up postgres -d
 
-# Install dependencies
+# Install dependencies and start app locally
 npm install --legacy-peer-deps
-
-# Start the application
 npm run start:dev
 ```
-
-**What you get:**
-
-- ✅ PostgreSQL in Docker
-- ✅ NestJS running locally
-- ✅ Full development experience
-- ✅ Direct debugging capabilities
-
-### Option 3: Local Development
-
-**Perfect for**: Full control over the environment
-
-```bash
-# Install dependencies
-npm install --legacy-peer-deps
-
-# Set up local PostgreSQL database
-# Update .env with your database credentials
-
-# Start the application
-npm run start:dev
-```
-
-**Requirements:**
-
-- Local PostgreSQL installation
-- Manual database setup
-- Environment configuration
 
 ## 📚 API Documentation
 
 ### Swagger UI
 
-Interactive API documentation is available at:
+**Interactive API documentation** is available at: `http://localhost:3000/api/docs`
 
-```
-http://localhost:3000/api/docs
-```
+**Purpose**: Swagger provides a complete interactive interface where you can:
 
-### Pre-loaded Test Credentials
+- 🔍 **Explore all endpoints** with detailed descriptions
+- 🧪 **Test APIs directly** from the browser
+- 📝 **See request/response examples** for each endpoint
+- 🔐 **Authenticate once** and test all protected endpoints
+- 📊 **Download files** directly from export endpoints
 
-```json
-{
-  "username": "librarian",
-  "password": "password123"
-}
-```
+**How to use**:
 
-### Quick API Overview
+1. Open `http://localhost:3000/api/docs` in your browser
+2. Click "Authorize" and login with: `librarian` / `password123`
+3. Explore and test any endpoint with the "Try it out" button
+4. All request examples are pre-filled with test data
 
-| Endpoint                             | Method | Description           |
-| ------------------------------------ | ------ | --------------------- |
-| `/auth/login`                        | POST   | User authentication   |
-| `/auth/register`                     | POST   | Register new user     |
-| `/books`                             | GET    | List all books        |
-| `/books/search`                      | GET    | Search books          |
-| `/books`                             | POST   | Add new book          |
-| `/borrowers`                         | GET    | List all borrowers    |
-| `/borrowers`                         | POST   | Register borrower     |
-| `/borrowing/borrowers/:id/checkout`  | POST   | Check out book        |
-| `/borrowing/records/:id/return`      | POST   | Return book           |
-| `/borrowing/overdue`                 | GET    | Get overdue books     |
-| `/reports/export/overdue-last-month` | GET    | Export overdue report |
+### API Overview
+
+| Endpoint                             | Method   | Description                       |
+| ------------------------------------ | -------- | --------------------------------- |
+| `/auth/login`                        | POST     | User authentication               |
+| `/books`                             | GET/POST | List and create books             |
+| `/books/search`                      | GET      | Search books by title/author/ISBN |
+| `/borrowers`                         | GET/POST | List and register borrowers       |
+| `/borrowing/borrowers/:id/checkout`  | POST     | Check out book to borrower        |
+| `/borrowing/records/:id/return`      | POST     | Return book using record ID       |
+| `/borrowing/overdue`                 | GET      | Get all overdue books             |
+| `/reports/export/overdue-last-month` | GET      | Download overdue books report     |
 
 ## 🔐 Authentication
 
-The API uses **JWT (JSON Web Tokens)** for authentication:
+The API uses **JWT (JSON Web Tokens)** for secure access. All endpoints except login/register require authentication.
 
-1. **Login** to get a token:
-
-   ```bash
-   POST /auth/login
-   {
-     "username": "librarian",
-     "password": "password123"
-   }
-   ```
-
-2. **Use the token** in subsequent requests:
-
-   ```bash
-   Authorization: Bearer <your-jwt-token>
-   ```
-
-3. **Protected endpoints**: All endpoints except `/auth/login` and `/auth/register` require authentication.
+**Test Credentials**: `librarian` / `password123`
 
 ## 🎯 Core Features
 
@@ -251,7 +183,6 @@ The API uses **JWT (JSON Web Tokens)** for authentication:
 - ✅ **Hot reloading** in development environment
 - ✅ **Comprehensive unit tests** for Books module
 - ✅ **Database seeding** with realistic test data
-- ✅ **Health checks** and service dependencies
 
 ## 🗄️ Database Schema
 
@@ -292,9 +223,6 @@ npm run test -- --testPathPattern=books
 
 # Test coverage
 npm run test:cov
-
-# E2E tests
-npm run test:e2e
 ```
 
 ### Test Coverage
@@ -303,51 +231,6 @@ npm run test:e2e
 - ✅ **Books Controller**: Endpoint testing, authentication
 - ✅ **Mock implementations** for database operations
 - ✅ **Error scenario testing**
-
-## 📁 Project Structure
-
-```
-src/
-├── auth/                   # Authentication module
-│   ├── dto/               # Login/Register DTOs
-│   ├── entities/          # User entity
-│   ├── guards/            # JWT auth guard
-│   └── strategies/        # JWT strategy
-├── books/                 # Books management
-│   ├── dto/               # Book DTOs
-│   ├── entities/          # Book entity
-│   └── *.spec.ts         # Unit tests
-├── borrowers/             # Borrowers management
-├── borrowing/             # Borrowing process
-├── reports/               # Analytics & exports
-├── database/              # Database seeding
-└── config/                # Configuration files
-
-docker-compose.yaml        # Container orchestration
-Dockerfile                 # Application container
-setup.sh                   # Quick setup script
-```
-
-## 🔧 Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-# Database Configuration
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_USERNAME=postgres
-DATABASE_PASSWORD=password
-DATABASE_NAME=library_management
-
-# JWT Configuration
-JWT_SECRET=your-super-secret-jwt-key
-JWT_EXPIRES_IN=24h
-
-# Application
-PORT=3000
-NODE_ENV=development
-```
 
 ## 📊 Pre-loaded Test Data
 
@@ -358,142 +241,3 @@ The system comes with realistic test data:
 - **👥 4 Borrowers**: Registered library members
 - **📋 5 Borrowing records**: Including 2 overdue books for testing
 - **📈 Ready for reports**: Data spans multiple months for analytics
-
-## 🚦 API Rate Limits
-
-| Endpoint            | Limit              | Purpose                     |
-| ------------------- | ------------------ | --------------------------- |
-| `POST /auth/login`  | 5 requests/minute  | Prevent brute force attacks |
-| `GET /books/search` | 20 requests/minute | Prevent search abuse        |
-| All other endpoints | 10 requests/minute | General API protection      |
-
-## 🎯 Usage Examples
-
-### Authentication Flow
-
-```bash
-# 1. Login
-curl -X POST http://localhost:3000/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username": "librarian", "password": "password123"}'
-
-# 2. Use the returned token
-curl -X GET http://localhost:3000/books \
-  -H "Authorization: Bearer <your-token>"
-```
-
-### Book Management
-
-```bash
-# Add a new book
-curl -X POST http://localhost:3000/books \
-  -H "Authorization: Bearer <token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "New Book",
-    "author": "Author Name",
-    "isbn": "978-1234567890",
-    "totalQuantity": 3,
-    "shelfLocation": "A1-B1"
-  }'
-
-# Search books
-curl -X GET "http://localhost:3000/books/search?q=gatsby" \
-  -H "Authorization: Bearer <token>"
-```
-
-### Borrowing Process
-
-```bash
-# Check out a book
-curl -X POST http://localhost:3000/borrowing/borrowers/{borrowerId}/checkout \
-  -H "Authorization: Bearer <token>" \
-  -H "Content-Type: application/json" \
-  -d '{"bookId": "book-uuid-here"}'
-
-# Return a book
-curl -X POST http://localhost:3000/borrowing/records/{recordId}/return \
-  -H "Authorization: Bearer <token>"
-```
-
-### Export Reports
-
-```bash
-# Download overdue books report (Excel)
-curl -X GET "http://localhost:3000/reports/export/overdue-last-month?format=xlsx" \
-  -H "Authorization: Bearer <token>" \
-  --output overdue-report.xlsx
-
-# Download borrowing report (CSV)
-curl -X GET "http://localhost:3000/reports/export/borrowing-last-month?format=csv" \
-  -H "Authorization: Bearer <token>" \
-  --output borrowing-report.csv
-```
-
-## 🛠 Development Commands
-
-```bash
-# Development
-npm run start:dev          # Start with hot reload
-npm run start:debug        # Start with debugging
-
-# Production
-npm run build              # Build the application
-npm run start:prod         # Start production server
-
-# Database
-docker-compose up postgres -d    # Start database only
-docker-compose down -v           # Reset everything
-
-# Linting & Formatting
-npm run lint               # Check code style
-npm run format             # Format code
-```
-
-## 🚀 Deployment
-
-### Docker Production
-
-```bash
-# Build production image
-docker build -t library-management .
-
-# Run with production database
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-### Manual Deployment
-
-```bash
-# Build the application
-npm run build
-
-# Start production server
-npm run start:prod
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **NestJS** for the amazing framework
-- **TypeORM** for database abstraction
-- **PostgreSQL** for reliable data storage
-- **Docker** for containerization
-- **Swagger** for API documentation
-
----
-
-**Built with ❤️ for efficient library management**
-
-For questions or support, please open an issue in the repository.
