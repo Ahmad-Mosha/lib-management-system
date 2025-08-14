@@ -31,7 +31,7 @@ export class BorrowingController {
     return this.borrowingService.checkoutBook(borrowerId, checkoutBookDto);
   }
 
-  @Post('records/:borrowingRecordId/return')
+  @Post(':borrowingRecordId/return')
   @ApiOperation({ summary: 'Return a book using borrowing record ID' })
   @ApiResponse({ status: 200, description: 'Book returned successfully' })
   @ApiResponse({
@@ -42,7 +42,7 @@ export class BorrowingController {
     return this.borrowingService.returnBookByRecordId(borrowingRecordId);
   }
 
-  @Get('borrowers/:borrowerId/current-books')
+  @Get(':borrowerId/current-books')
   @ApiOperation({
     summary: 'Get current books borrowed by a specific borrower',
   })
