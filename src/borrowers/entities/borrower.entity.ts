@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  Index,
 } from 'typeorm';
 
 @Entity('borrowers')
@@ -14,6 +15,7 @@ export class Borrower {
   id: string;
 
   @Column()
+  @Index('idx_borrower_name')
   name: string;
 
   @Column({ unique: true })

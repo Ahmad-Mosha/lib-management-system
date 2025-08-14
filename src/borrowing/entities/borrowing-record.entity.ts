@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { Book } from '../../books/entities/book.entity';
 import { Borrower } from '../../borrowers/entities/borrower.entity';
@@ -25,9 +26,11 @@ export class BorrowingRecord {
   checkoutDate: Date;
 
   @Column({ name: 'due_date', type: 'date' })
+  @Index('idx_due_date')
   dueDate: Date;
 
   @Column({ name: 'return_date', type: 'date', nullable: true })
+  @Index('idx_return_date')
   returnDate: Date | null;
 
   @ManyToOne(() => Book, (book) => book.borrowingRecords)

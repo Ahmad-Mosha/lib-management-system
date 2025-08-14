@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  Index,
 } from 'typeorm';
 
 @Entity('books')
@@ -14,9 +15,11 @@ export class Book {
   id: string;
 
   @Column()
+  @Index('idx_book_title')
   title: string;
 
   @Column()
+  @Index('idx_book_author')
   author: string;
 
   @Column({ unique: true })
