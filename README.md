@@ -52,6 +52,7 @@ The fastest way to get started:
 ```bash
 git clone <repository-url>
 cd library-management-system
+chmod +x setup.sh
 ./setup.sh
 ```
 
