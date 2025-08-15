@@ -114,6 +114,22 @@ npm run start:dev
 3. Explore and test any endpoint with the "Try it out" button
 4. All request examples are pre-filled with test data
 
+### Swagger Screenshots
+
+Each endpoint in Swagger includes complete documentation with expected inputs, outputs, response codes, and examples:
+
+![Database Schema](images/schemas.png)
+
+![Auth Module](images/auth-module.png)
+
+![Books Module](images/books-module.png)
+
+![Borrowers Module](images/borrowers-module.png)
+
+![Borrowing Module](images/borrowing-module.png)
+
+![Reports Module](images/reports-module.png)
+
 ### API Overview
 
 | Endpoint                             | Method   | Description                       |
@@ -236,7 +252,7 @@ npm run test:cov
 
 The system comes with realistic test data:
 
-- **👤 2 User accounts**: `librarian/password123`, `admin/admin123`
+- **👤 1 User accounts**: `librarian/password123`
 - **📚 5 Books**: Classic literature with varying availability
 - **👥 4 Borrowers**: Registered library members
 - **📋 5 Borrowing records**: Including 2 overdue books for testing
