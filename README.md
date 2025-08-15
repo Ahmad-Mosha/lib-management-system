@@ -252,7 +252,8 @@ npm run test:cov
 
 The system comes with realistic test data:
 
-- **👤 1 User accounts**: `librarian/password123`
+- **👤 1 User account**:
+`librarian/password123`
 - **📚 5 Books**: Classic literature with varying availability
 - **👥 4 Borrowers**: Registered library members
 - **📋 5 Borrowing records**: Including 2 overdue books for testing
