@@ -111,9 +111,14 @@ npm run start:dev
 **How to use**:
 
 1. Open `http://localhost:3000/api/docs` in your browser
-2. Click "Authorize" and login with: `librarian` / `password123`
-3. Explore and test any endpoint with the "Try it out" button
-4. All request examples are pre-filled with test data
+2. Navigate to the **Auth** module and find the `/auth/login` endpoint
+3. Click "Try it out" and use credentials: `librarian` / `password123`
+4. Click "Execute" and copy the `access_token` from the response
+5. Click the "Authorize" button at the top of the page
+6. Paste the token in the "Value" field (it should auto-format as `Bearer <token>`)
+7. Click "Authorize" and then "Close"
+8. Now you can explore and test any protected endpoint with the "Try it out" button
+9. All request examples are pre-filled with test data
 
 ### Swagger Screenshots
 
@@ -130,6 +135,11 @@ Each endpoint in Swagger includes complete documentation with expected inputs, o
 ![Borrowing Module](images/borrowing-module.png)
 
 ![Reports Module](images/reports-module.png)
+
+### Postman Collection
+
+If you prefer testing with Postman, join our shared workspace with pre-configured requests:
+[📮 **Join Postman Workspace**](https://app.getpostman.com/join-team?invite_code=1bd1f2035f95c37f955e7341051088b4720739d3e1bdca98da2a8b54d41131be&target_code=f6c6ffad9cf9af669c9165eb33329f15)
 
 ### API Overview
 
